@@ -1,0 +1,9 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: ChartRepo
+metadata:
+  name: silk-road
+  namespace: captain-system
+spec:
+  url: https://cloud-yao.github.io/silk-road-chart
+status:
+  phase: Synced

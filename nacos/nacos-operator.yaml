@@ -1,0 +1,33 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: nacos-operator
+  namespace: captain-system
+spec:
+  chart: silk-road/nacos-operator
+  version: 1.0.0
+  namespace: captain-system
+  releaseName: nacos-operator
+  # source:
+  #   http:
+  #     url: https://cloud-yao.github.io/silk-road-chart/nacos/nacos-operator-1.0.0.tgz
+  values:
+    # 资源数量
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    replicaCount: 1
+    # hpa
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 100
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}

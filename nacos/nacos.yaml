@@ -1,0 +1,53 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: nacos
+  namespace: captain-system
+spec:
+  chart: silk-road/nacos
+  namespace: captain-system
+  releaseName: nacos
+  version: 2.2.3
+  values:
+    # 资源设置
+    resources:
+      limits:
+        cpu: 1
+        memory: 1024Mi
+      requests:
+        cpu: 1000m
+        memory: 1024Mi
+    # 存储设置
+    volume:
+      enabled: false
+      storageSize: 1Gi
+      storageClassName: default
+    # 数据库设置
+    database:
+      type: mysql
+      mysqlHost: mysql.captain-system.svc.cluster.local
+      mysqlPort: "3306"
+      mysqlUser: root
+      mysqlPassword: "lovecy520824."
+      mysqlDb: nacos
+    # 环境变量设置
+    env:
+      - name: JVM_XMX
+        value: 1g
+      - name: NACOS_AUTH_IDENTITY_KEY
+        value: silk-road
+      - name: NACOS_AUTH_IDENTITY_VALUE
+        value: silk-road
+      - name: NACOS_AUTH_TOKEN
+        value: VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg=
+      - name: SPRING_DATASOURCE_PLATFORM
+        value: mysql
+    # 配置文件
+    config: |
+      management.endpoints.web.exposure.include=*
+    # 节点选择器
+    nodeSelector: {}
+    # 容忍度
+    tolerations: []
+    # 亲和性
+    affinity: {}

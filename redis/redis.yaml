@@ -1,0 +1,68 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: redis
+  namespace: captain-system
+spec:
+  chart: silk-road/redis
+  namespace: captain-system
+  releaseName: redis
+  version: 7.2.3
+  values:
+    global:
+      redis:
+        password: lovecy520824.
+        storageClass: ""
+    architecture: "replication"
+    auth:
+      enabled: true
+    master:
+      count: 1
+      containerPorts:
+        redis: 6379
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1024Mi
+        requests:
+          cpu: 500m
+          memory: 1024Mi
+      persistence:
+        enabled: true
+        path: "/data"
+        subPath: ""
+        accessModes: ["ReadWriteOnce"]
+        size: 8Gi
+      service:
+        type: ClusterIP
+        ports:
+          redis: 6379
+        nodePorts:
+          redis: ""
+        externalTrafficPolicy: Cluster
+    replica:
+      replicaCount: 1
+      disableCommands: ["FLUSHDB", "FLUSHALL"]
+      containerPorts:
+        redis: 6379
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1024Mi
+        requests:
+          cpu: 500m
+          memory: 1024Mi
+      persistence:
+        enabled: true
+        path: /data
+        subPath: ""
+        accessModes: ["ReadWriteOnce"]
+        size: 8Gi
+      service:
+        type: ClusterIP
+        ports:
+          redis: 6379
+        nodePorts:
+          redis: ""
+    metrics:
+      enabled: false

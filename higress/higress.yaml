@@ -1,0 +1,75 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: higress
+  namespace: captain-system
+spec:
+  chart: silk-road/higress
+  namespace: captain-system
+  releaseName: higress
+  version: 1.2.0
+  values:
+    higress-core:
+      gateway:
+        # 网关副本数
+        replicas: 1
+        # 网关资源
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 2048Mi
+        # 水平扩展配置
+        autoscaling:
+          enabled: true
+          minReplicas: 1
+          maxReplicas: 5
+          targetCPUUtilizationPercentage: 80
+        # 节点选择
+        nodeSelector: {}
+        # 容忍度
+        tolerations: []
+        # 亲和性
+        affinity: {}
+      controller:
+        # 控制器副本数
+        replicas: 1
+        # 控制器资源申请
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 2048Mi
+        # 控制器 自动扩容
+        autoscaling:
+          enabled: true
+          minReplicas: 1
+          maxReplicas: 5
+          targetCPUUtilizationPercentage: 80
+        # 节点选择器
+        nodeSelector: {}
+        # 容忍度
+        tolerations: []
+        # 亲和性
+        affinity: {}
+    higress-console:
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 1
+          memory: 1Gi
+      replicaCount: 1
+      admin:
+        username: root
+        displayName: root
+        password:
+          value: "higress"
+      nodeSelector: {}
+      affinity: {}
+      tolerations: {}

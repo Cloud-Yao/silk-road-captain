@@ -1,0 +1,54 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: mysql
+  namespace: captain-system
+spec:
+  chart: silk-road/mysql
+  namespace: captain-system
+  releaseName: mysql
+  version: 8.0.35
+  values:
+    global:
+      storageClass: ""
+    architecture: "replication"
+    auth:
+      rootPassword: lovecy520824.
+    primary:
+      resources:
+        requests:
+          cpu: 0.5
+          memory: 512Mi
+        limits:
+          cpu: 1
+          memory: 1Gi
+      # 测试环境下不开启
+      persistence:
+        enabled: false
+        size: 1Gi
+        accessModes:
+          - ReadWriteOnce
+        storageClass: ""
+      # 主节点亲和性
+      affinity: {}
+      # 节点选择器
+      nodeSelector: {}
+      # 容忍度
+      tolerations: []
+    secondary:
+      replicaCount: 1
+      persistence:
+        enabled: false
+        size: 1Gi
+        accessModes:
+          - ReadWriteOnce
+        storageClass: ""
+    metrics:
+      enabled: true
+      resources:
+        limits:
+          cpu: 100m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
