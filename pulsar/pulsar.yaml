@@ -1,0 +1,43 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: pulsar
+  namespace: captain-system
+spec:
+  chart: silk-road/pulsar
+  namespace: captain-system
+  releaseName: pulsar
+  version: 3.1.0
+  values:
+    zookeeper:
+      server: "zookeeper.captain-system.svc.cluster.local"
+    bookeeper:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 500m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+      storage:
+        enabled: false
+        journal:
+          accessModes: ReadWriteOnce
+          size: 1Gi
+          storageClassName: ""
+        ledger:
+          accessModes: ReadWriteOnce
+          size: 1Gi
+          storageClassName: ""
+    broker:
+      replicas: 2
+      resources:
+        requests:
+          cpu: 200m
+          memory: 1Gi
+        limits:
+          cpu: 700m
+          memory: 1Gi
+      # aop,kop,mop,默认为pulsar
+      protocol: ""

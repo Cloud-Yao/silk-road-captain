@@ -1,0 +1,42 @@
+apiVersion: app.alauda.io/v1alpha1
+kind: HelmRequest
+metadata:
+  name: pulsar-operator
+  namespace: captain-system
+spec:
+  chart: silk-road/pulsar-operator
+  namespace: captain-system
+  releaseName: pulsar-operator
+  version: 1.0.0
+  values:
+    components:
+      # zookeeper
+      zookeeper: false
+      # bookkeeper
+      bookkeeper: true
+      # pulsar(broker, proxy)
+      pulsar: true
+    bookkeeper:
+      workers: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      nodeSelector: {}
+      affinity: {}
+      tolerations: []
+    pulsar:
+      workers: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      nodeSelector: {}
+      affinity: {}
+      tolerations: []
